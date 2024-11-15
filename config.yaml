@@ -1,0 +1,31 @@
+# config.yaml
+
+# Default date range for historical data
+data:
+  start_date: "2020-01-01"
+  end_date: "2023-12-31"
+
+# Data paths (these can be customized if needed)
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+
+# Output settings
+output:
+  excel_path: "data/processed/optimized_portfolio.xlsx"  # Path to save the portfolio and risk metrics
+
+# Logging settings
+logging:
+  level: "INFO"
+  file: "logs/app.log"  # Specify a log file if you want to log to a file
+
+# Scraping settings
+scraping:
+  wikipedia_url: "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+
+# Model settings
+model:
+  optimization:
+    risk_free_rate: 0.04  # Risk-free rate for Sharpe ratio calculation
+    confidence_level: 0.95  # Confidence level for VaR calculation
+    objective: "minimize_sharpe"  # Optimization objective; options: "minimize_risk" or "maximize_sharpe"
