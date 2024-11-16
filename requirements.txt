@@ -8,3 +8,4 @@ nltk
 pyYAML
 logging
 openpyxl
+APScheduler==3.10.4

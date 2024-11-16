@@ -460,3 +460,87 @@ Optimal Portfolio Allocation:
 2024-11-15 03:38:44,599 - src.evaluation.backtesting - INFO - Sharpe Ratio: 0.3647
 2024-11-15 03:38:44,814 - src.evaluation.backtesting - INFO - Risk metrics saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
 2024-11-15 03:38:44,815 - __main__ - INFO - Robo Advisor run completed successfully.
+2024-11-15 20:49:32,565 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-15 20:49:37,139 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers from Wikipedia.
+2024-11-15 20:49:37,141 - __main__ - INFO - Step 1: Data Ingestion
+2024-11-15 20:49:37,142 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2020-01-01_2023-12-31.csv
+2024-11-15 20:49:40,822 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-15 20:49:41,356 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-15 20:49:41,357 - __main__ - INFO - Step 2: Data Preprocessing
+2024-11-15 20:49:41,358 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-15 20:49:41,376 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.5: 492
+2024-11-15 20:49:41,441 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (1006, 493)
+2024-11-15 20:49:44,307 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-15 20:49:44,307 - __main__ - INFO - Step 3: Feature Engineering
+2024-11-15 20:49:44,315 - src.feature_engineering.risk_indicators - INFO - Calculating daily returns.
+2024-11-15 20:49:44,612 - src.feature_engineering.risk_indicators - INFO - Daily returns calculated.
+2024-11-15 20:49:44,613 - __main__ - INFO - Step 4: Portfolio Optimization
+2024-11-15 20:49:44,614 - src.models.optimization - INFO - Starting portfolio optimization.
+2024-11-15 20:49:44,707 - src.models.optimization - INFO - Objective: Minimize risk (standard deviation).
+2024-11-15 20:50:27,348 - src.models.optimization - INFO - Portfolio optimization successful.
+2024-11-15 20:50:27,360 - __main__ - INFO - Step 5: Display and Save Portfolio Allocation
+2024-11-15 20:50:27,362 - src.evaluation.backtesting - INFO - 
+Optimal Portfolio Allocation:
+2024-11-15 20:50:27,362 - src.evaluation.backtesting - INFO -     Ticker    Weight
+0        A  0.000000
+1     AAPL  0.000000
+2     ABBV  0.035674
+3     ABNB  0.045770
+4      ABT  0.000000
+..     ...       ...
+487    XYL  0.000000
+488    YUM  0.000000
+489    ZBH  0.000000
+490   ZBRA  0.000000
+491    ZTS  0.000000
+
+[492 rows x 2 columns]
+2024-11-15 20:50:28,699 - src.evaluation.backtesting - INFO - Portfolio allocation saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-15 20:50:28,699 - __main__ - INFO - Step 6: Calculate and Save Risk Metrics
+2024-11-15 20:50:28,700 - src.evaluation.backtesting - INFO - Calculating risk metrics for the portfolio.
+2024-11-15 20:50:28,702 - src.feature_engineering.risk_indicators - INFO - Calculating Value at Risk (VaR) at 95.0% confidence level.
+2024-11-15 20:50:28,707 - src.feature_engineering.risk_indicators - INFO - VaR calculated: -0.0129
+2024-11-15 20:50:28,708 - src.feature_engineering.risk_indicators - INFO - Calculating Max Drawdown.
+2024-11-15 20:50:28,710 - src.feature_engineering.risk_indicators - INFO - Max Drawdown calculated: -0.1496
+2024-11-15 20:50:28,711 - src.feature_engineering.risk_indicators - INFO - Calculating Sharpe Ratio.
+2024-11-15 20:50:28,712 - src.feature_engineering.risk_indicators - INFO - Sharpe Ratio calculated: 0.3647
+2024-11-15 20:50:28,712 - src.evaluation.backtesting - INFO - Value at Risk (VaR): -0.0129
+2024-11-15 20:50:28,712 - src.evaluation.backtesting - INFO - Max Drawdown: -0.1496
+2024-11-15 20:50:28,712 - src.evaluation.backtesting - INFO - Sharpe Ratio: 0.3647
+2024-11-15 20:50:29,040 - src.evaluation.backtesting - INFO - Risk metrics saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-15 20:50:29,040 - __main__ - INFO - Robo Advisor run completed successfully.
+2024-11-15 21:18:54,722 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-15 21:18:57,553 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers from Wikipedia.
+2024-11-15 21:18:57,554 - __main__ - INFO - Step 1: Data Ingestion
+2024-11-15 21:18:57,555 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2020-01-01_2023-12-31.csv
+2024-11-15 21:19:00,293 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-15 21:19:00,737 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-15 21:19:00,738 - __main__ - INFO - Step 2: Data Preprocessing
+2024-11-15 21:19:00,739 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-15 21:19:00,751 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.5: 492
+2024-11-15 21:19:00,804 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (1006, 493)
+2024-11-15 21:19:04,257 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-15 21:19:04,257 - __main__ - INFO - Step 3: Feature Engineering
+2024-11-15 21:19:04,272 - src.feature_engineering.risk_indicators - INFO - Calculating daily returns.
+2024-11-15 21:19:05,092 - src.feature_engineering.risk_indicators - INFO - Daily returns calculated.
+2024-11-15 21:19:05,093 - __main__ - INFO - Step 4: Portfolio Optimization
+2024-11-15 21:19:05,093 - src.models.optimization - INFO - Starting portfolio optimization.
+2024-11-15 21:19:05,159 - src.models.optimization - INFO - Objective: Minimize risk (standard deviation).
+2024-11-15 21:19:48,421 - src.models.optimization - INFO - Portfolio optimization successful.
+2024-11-15 21:19:48,438 - __main__ - INFO - Step 5: Display and Save Portfolio Allocation
+2024-11-15 21:19:48,439 - src.evaluation.backtesting - INFO - 
+Optimal Portfolio Allocation:
+2024-11-15 21:19:48,439 - src.evaluation.backtesting - INFO -     Ticker    Weight
+0        A  0.000000
+1     AAPL  0.000000
+2     ABBV  0.035674
+3     ABNB  0.045770
+4      ABT  0.000000
+..     ...       ...
+487    XYL  0.000000
+488    YUM  0.000000
+489    ZBH  0.000000
+490   ZBRA  0.000000
+491    ZTS  0.000000
+
+[492 rows x 2 columns]

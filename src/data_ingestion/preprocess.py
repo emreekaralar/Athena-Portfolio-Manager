@@ -8,28 +8,34 @@ from src.utils.config import PROJECT_ROOT  # Import the project root path
 logger = get_logger(__name__)
 
 
-def clean_stock_data(df, coverage_threshold=0.5):
+def clean_stock_data(data, coverage_threshold=0.5):
     """
-    Cleans the stock data by handling missing values.
+    Cleans the stock data by handling missing values and filtering stocks based on coverage threshold.
 
     Parameters:
-    - df (DataFrame): Raw stock data with missing values.
-    - coverage_threshold (float): Minimum percentage of non-NA values for each stock to be retained (0.0 to 1.0).
+    - data (DataFrame): Raw stock price data.
+    - coverage_threshold (float): Minimum data coverage required to retain a stock.
 
     Returns:
-    - DataFrame: Cleaned stock data with minimal missing values.
+    - df (DataFrame): Cleaned stock data.
     """
+    logger = get_logger(__name__)
     logger.info("Cleaning stock data.")
 
-    # Drop stocks with too many missing values based on coverage threshold
-    min_non_na_count = int(coverage_threshold * len(df))
-    df = df.dropna(thresh=min_non_na_count, axis=1)
-    logger.info(f"Stocks retained after applying coverage threshold of {coverage_threshold}: {df.shape[1]}")
+    # Calculate the coverage (non-NA values) for each stock
+    coverage = data.notna().mean()
 
-    # Fill remaining missing values with forward and backward filling
-    df = df.fillna(method='ffill').fillna(method='bfill')
+    # Filter stocks based on coverage threshold
+    filtered_stocks = coverage[coverage >= coverage_threshold].index.tolist()
+    logger.info(f"Stocks retained after applying coverage threshold of {coverage_threshold}: {len(filtered_stocks)}")
 
-    # Reset the index for consistent output
+    # Select the filtered stocks
+    df = data[filtered_stocks]
+
+    # Fill missing values using forward and backward fill
+    df = df.ffill().bfill()
+
+    # Reset index to ensure 'Date' is a column if needed
     df = df.reset_index()
 
     logger.info(f"Stock data cleaned. Final shape: {df.shape}")

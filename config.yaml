@@ -1,31 +1,124 @@
 # config.yaml
 
+# =========================
+# 1. Data Configuration
+# =========================
+
 # Default date range for historical data
 data:
   start_date: "2020-01-01"
   end_date: "2023-12-31"
 
+# =========================
+# 2. Paths Configuration
+# =========================
+
 # Data paths (these can be customized if needed)
 paths:
-  raw_data: "data/raw"
-  processed_data: "data/processed"
+  raw_data: "data/raw"             # Directory to store raw fetched data
+  processed_data: "data/processed" # Directory to store processed data
+
+# =========================
+# 3. Output Configuration
+# =========================
 
 # Output settings
 output:
-  excel_path: "data/processed/optimized_portfolio.xlsx"  # Path to save the portfolio and risk metrics
+  excel_path: "data/processed/optimized_portfolio.xlsx"  # Path to save the portfolio allocation and risk metrics
+
+# =========================
+# 4. Logging Configuration
+# =========================
 
 # Logging settings
 logging:
-  level: "INFO"
-  file: "logs/app.log"  # Specify a log file if you want to log to a file
+  level: "INFO"                  # Logging level; options: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  file: "logs/app.log"           # Path to the log file
+
+# =========================
+# 5. Scraping Configuration
+# =========================
 
 # Scraping settings
 scraping:
-  wikipedia_url: "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+  wikipedia_url: "https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"  # URL to fetch S&P 500 tickers and sectors
+
+# =========================
+# 6. Model Configuration
+# =========================
 
 # Model settings
 model:
   optimization:
-    risk_free_rate: 0.04  # Risk-free rate for Sharpe ratio calculation
-    confidence_level: 0.95  # Confidence level for VaR calculation
-    objective: "minimize_sharpe"  # Optimization objective; options: "minimize_risk" or "maximize_sharpe"
+    risk_free_rate: 0.04             # Risk-free rate for Sharpe ratio calculation
+    confidence_level: 0.95           # Confidence level for VaR calculation
+    method: "long_short"          # Optimization method; options: "mean_variance", "minimum_variance", "maximum_sharpe", "risk_parity", "long_short"
+    objective: "maximize_sharpe"     # Optimization objective; applicable for "long_short"; options: "maximize_sharpe", "minimize_risk"
+    long_short_ratio: 1.0            # Ratio of total long positions to total short positions; applicable for "long_short"
+
+# =========================
+# 7. Screening Configuration
+# =========================
+
+# Screening settings
+screening:
+  sectors:
+    Information Technology:
+      type: "avg_return"         # Screening type; options: "avg_return", "momentum", "valuation", "dividend_yield", "volatility", "earnings_growth"
+      threshold: 0.02            # Threshold for the screening metric
+    Health Care:
+      type: "avg_return"
+      threshold: 0.015
+    Financials:
+      type: "avg_return"
+      threshold: 0.01
+    Consumer Discretionary:
+      type: "avg_return"
+      threshold: 0.015
+    Consumer Staples:
+      type: "avg_return"
+      threshold: 0.012
+    Energy:
+      type: "avg_return"
+      threshold: 0.018
+    Industrials:
+      type: "avg_return"
+      threshold: 0.013
+    Materials:
+      type: "avg_return"
+      threshold: 0.014
+    Real Estate:
+      type: "avg_return"
+      threshold: 0.011
+    Utilities:
+      type: "momentum"
+      threshold: 0.1
+    Communication Services:
+      type: "valuation"
+      threshold: 20
+    Dividend Aristocrats:
+      type: "dividend_yield"
+      threshold: 0.03
+    High Growth:
+      type: "earnings_growth"
+      threshold: 0.1
+    Low Volatility:
+      type: "volatility"
+      threshold: 0.015
+    # Add other sectors and their corresponding screening criteria as needed
+
+# =========================
+# 8. Rebalancing Configuration
+# =========================
+
+# Rebalancing settings
+rebalance:
+  frequency: "monthly"      # Rebalancing frequency; options: "daily", "weekly", "monthly"
+  day_of_week: "monday"     # Relevant for weekly rebalancing
+  day_of_month: 1           # Relevant for monthly rebalancing
+
+# =========================
+# 9. Additional Configurations
+# =========================
+
+# (Add any additional configuration sections here as your project evolves)
