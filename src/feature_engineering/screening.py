@@ -2,194 +2,69 @@
 
 import pandas as pd
 from src.utils.logger import get_logger
-from src.data_ingestion.fetch_data import get_sp500_tickers_with_sector
-import yfinance as yf
-import numpy as np
 
 logger = get_logger(__name__)
 
-# Mapping of screening types to their corresponding functions
-SCREENING_FUNCTIONS = {
-    "avg_return": "screen_avg_return",
-    "momentum": "screen_momentum",
-    "valuation": "screen_valuation",
-    "dividend_yield": "screen_dividend_yield",
-    "volatility": "screen_volatility",
-    "earnings_growth": "screen_earnings_growth"
-}
-
-
-def sector_specific_screening(price_data, tickers_df, criteria_config):
+def sector_specific_screening(financial_data, scores_df, tickers_df, num_long, num_short, available_tickers):
     """
-    Applies sector-specific screening criteria based on configuration.
+    Assigns scores to stocks and selects stocks for long and short positions.
 
     Parameters:
-    - price_data (DataFrame): Historical price data with Date as index and tickers as columns.
+    - financial_data (DataFrame): DataFrame containing financial metrics.
+    - scores_df (DataFrame): DataFrame containing Ticker and Composite Score.
     - tickers_df (DataFrame): DataFrame containing 'Ticker' and 'Sector' columns.
-    - criteria_config (dict): Configuration for screening criteria per sector.
+    - num_long (int): Number of stocks to long in each sector.
+    - num_short (int): Number of stocks to short in each sector.
+    - available_tickers (set): Set of tickers available in the cleaned price data.
 
     Returns:
-    - filtered_tickers (DataFrame): DataFrame of tickers that pass the screening criteria.
+    - long_tickers (DataFrame): DataFrame of tickers selected for long positions.
+    - short_tickers (DataFrame): DataFrame of tickers selected for short positions.
     """
-    logger = get_logger(__name__)
-    logger.info("Applying sector-specific screening criteria based on configuration.")
+    logger.info("Ranking stocks within each sector based on composite scores.")
 
-    filtered_rows = []
+    # Filter scores_df to include only available tickers
+    scores_df = scores_df[scores_df['Ticker'].isin(available_tickers)]
 
-    for _, row in tickers_df.iterrows():
-        ticker = row['Ticker']
-        sector = row['Sector']
-        if sector in criteria_config:
-            criterion = criteria_config[sector]
-            screening_type = criterion.get('type')
-            threshold = criterion.get('threshold')
-            screening_function_name = SCREENING_FUNCTIONS.get(screening_type)
+    # Merge scores with sector information
+    scores_with_sector = scores_df.merge(tickers_df[['Ticker', 'Sector']], on='Ticker')
 
-            if screening_function_name and screening_function_name in globals():
-                screening_function = globals()[screening_function_name]
-                metric = screening_function(ticker, price_data)
-                if metric is not None and metric > threshold:
-                    filtered_rows.append({
-                        'Ticker': ticker,
-                        'Sector': sector,
-                        'Metric': metric
-                    })
-            else:
-                logger.warning(f"Unsupported or undefined screening type '{screening_type}' for sector: {sector}")
+    long_positions = []
+    short_positions = []
+
+    sectors = scores_with_sector['Sector'].unique()
+
+    for sector in sectors:
+        sector_stocks = scores_with_sector[scores_with_sector['Sector'] == sector]
+
+        # Check if there are enough stocks in the sector
+        if len(sector_stocks) < (num_long + num_short):
+            logger.warning(f"Not enough stocks in sector '{sector}' for the specified number of long and short positions.")
+            # Adjust num_long and num_short proportionally
+            total_positions = len(sector_stocks)
+            adjusted_num_long = int((num_long / (num_long + num_short)) * total_positions)
+            adjusted_num_short = total_positions - adjusted_num_long
+            num_long_sector = max(adjusted_num_long, 1)
+            num_short_sector = max(adjusted_num_short, 1)
         else:
-            logger.warning(f"No screening criteria defined for sector: {sector}")
+            num_long_sector = num_long
+            num_short_sector = num_short
 
-    # Create DataFrame from the list of filtered rows
-    filtered_tickers = pd.DataFrame(filtered_rows, columns=['Ticker', 'Sector', 'Metric'])
-    logger.info(f"Screening complete. {len(filtered_tickers)} tickers passed the criteria.")
-    return filtered_tickers
+        sector_stocks = sector_stocks.sort_values(by='Composite Score', ascending=False)
 
+        # Select top N stocks for long positions
+        top_stocks = sector_stocks.head(num_long_sector)
+        long_positions.append(top_stocks)
 
-def screen_avg_return(ticker, price_data):
-    """
-    Screens based on average return over the last 30 days.
+        # Select bottom N stocks for short positions
+        bottom_stocks = sector_stocks.tail(num_short_sector)
+        short_positions.append(bottom_stocks)
 
-    Parameters:
-    - ticker (str): Stock ticker symbol.
-    - price_data (DataFrame): Historical price data.
+    # Concatenate the results
+    long_tickers = pd.concat(long_positions).reset_index(drop=True)
+    short_tickers = pd.concat(short_positions).reset_index(drop=True)
 
-    Returns:
-    - avg_return (float): Average return or None.
-    """
-    try:
-        avg_return = price_data[ticker].pct_change().dropna().tail(30).mean()
-        return avg_return
-    except Exception as e:
-        logger.error(f"Error calculating average return for {ticker}: {e}")
-        return None
+    logger.info(f"Selected {len(long_tickers)} stocks for long positions.")
+    logger.info(f"Selected {len(short_tickers)} stocks for short positions.")
 
-
-def screen_momentum(ticker, price_data):
-    """
-    Screens based on 90-day momentum.
-
-    Parameters:
-    - ticker (str): Stock ticker symbol.
-    - price_data (DataFrame): Historical price data.
-
-    Returns:
-    - momentum (float): Momentum or None.
-    """
-    try:
-        momentum = price_data[ticker].pct_change(periods=90).mean()
-        return momentum
-    except Exception as e:
-        logger.error(f"Error calculating momentum for {ticker}: {e}")
-        return None
-
-
-def screen_valuation(ticker, price_data):
-    """
-    Screens based on P/E ratio.
-
-    Parameters:
-    - ticker (str): Stock ticker symbol.
-    - price_data (DataFrame): Historical price data.
-
-    Returns:
-    - pe_ratio (float): P/E ratio or None.
-    """
-    try:
-        stock = yf.Ticker(ticker)
-        pe_ratio = stock.info.get('trailingPE', None)
-        if pe_ratio is not None:
-            return pe_ratio
-        else:
-            logger.warning(f"P/E ratio not available for {ticker}.")
-            return None
-    except Exception as e:
-        logger.error(f"Error fetching P/E ratio for {ticker}: {e}")
-        return None
-
-
-def screen_dividend_yield(ticker, price_data):
-    """
-    Screens based on dividend yield.
-
-    Parameters:
-    - ticker (str): Stock ticker symbol.
-    - price_data (DataFrame): Historical price data.
-
-    Returns:
-    - dividend_yield (float): Dividend yield or None.
-    """
-    try:
-        stock = yf.Ticker(ticker)
-        dividend_yield = stock.info.get('dividendYield', None)
-        if dividend_yield is not None:
-            return dividend_yield
-        else:
-            logger.warning(f"Dividend yield not available for {ticker}.")
-            return None
-    except Exception as e:
-        logger.error(f"Error fetching dividend yield for {ticker}: {e}")
-        return None
-
-
-def screen_volatility(ticker, price_data):
-    """
-    Screens based on annualized volatility.
-
-    Parameters:
-    - ticker (str): Stock ticker symbol.
-    - price_data (DataFrame): Historical price data.
-
-    Returns:
-    - annual_volatility (float): Annualized volatility or None.
-    """
-    try:
-        daily_std = price_data[ticker].pct_change().dropna().std()
-        annual_volatility = daily_std * np.sqrt(252)
-        return annual_volatility
-    except Exception as e:
-        logger.error(f"Error calculating volatility for {ticker}: {e}")
-        return None
-
-
-def screen_earnings_growth(ticker, price_data):
-    """
-    Screens based on earnings growth.
-
-    Parameters:
-    - ticker (str): Stock ticker symbol.
-    - price_data (DataFrame): Historical price data.
-
-    Returns:
-    - earnings_growth (float): Earnings growth rate or None.
-    """
-    try:
-        stock = yf.Ticker(ticker)
-        earnings_growth = stock.info.get('earningsGrowth', None)
-        if earnings_growth is not None:
-            return earnings_growth
-        else:
-            logger.warning(f"Earnings growth not available for {ticker}.")
-            return None
-    except Exception as e:
-        logger.error(f"Error fetching earnings growth for {ticker}: {e}")
-        return None
+    return long_tickers, short_tickers

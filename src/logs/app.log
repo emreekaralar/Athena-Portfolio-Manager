@@ -184,3 +184,250 @@ Optimal Portfolio Allocation:
 2024-11-16 02:45:10,220 - src.evaluation.backtesting - INFO - Sharpe Ratio: -0.0328
 2024-11-16 02:45:10,284 - src.evaluation.backtesting - INFO - Risk metrics saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
 2024-11-16 02:45:10,284 - src.robo_advisor - INFO - Robo Advisor run completed successfully.
+2024-11-17 00:42:54,855 - src.robo_advisor - INFO - Step 1: Data Ingestion
+2024-11-17 00:42:54,855 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-17 00:42:56,890 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-17 00:42:56,894 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2020-01-01_2023-12-31.csv
+2024-11-17 00:42:59,004 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-17 00:42:59,337 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-17 00:42:59,338 - src.robo_advisor - INFO - Step 2: Data Preprocessing
+2024-11-17 00:42:59,338 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-17 00:42:59,345 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.5: 492
+2024-11-17 00:42:59,392 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (1006, 493)
+2024-11-17 00:43:01,606 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-17 00:43:01,607 - src.robo_advisor - INFO - Step 3: Feature Engineering - Screening
+2024-11-17 00:43:01,607 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-17 00:43:04,113 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-17 00:43:04,119 - src.feature_engineering.screening - INFO - Applying sector-specific screening criteria based on configuration.
+2024-11-17 00:43:04,769 - src.feature_engineering.screening - ERROR - Error calculating average return for AMTM: 'AMTM'
+2024-11-17 00:43:04,977 - src.feature_engineering.screening - ERROR - Error calculating average return for BRK.B: 'BRK.B'
+2024-11-17 00:43:05,015 - src.feature_engineering.screening - ERROR - Error calculating average return for BF.B: 'BF.B'
+2024-11-17 00:43:05,428 - src.feature_engineering.screening - ERROR - Error calculating momentum for CEG: 'CEG'
+2024-11-17 00:43:06,012 - src.feature_engineering.screening - ERROR - Error calculating average return for GEHC: 'GEHC'
+2024-11-17 00:43:06,013 - src.feature_engineering.screening - ERROR - Error calculating average return for GEV: 'GEV'
+2024-11-17 00:43:06,295 - src.feature_engineering.screening - ERROR - Error calculating average return for KVUE: 'KVUE'
+2024-11-17 00:43:07,580 - src.feature_engineering.screening - ERROR - Error calculating average return for ON: 'ON'
+2024-11-17 00:43:07,737 - src.feature_engineering.screening - WARNING - P/E ratio not available for PARA.
+2024-11-17 00:43:07,872 - src.feature_engineering.screening - ERROR - Error calculating average return for SW: 'SW'
+2024-11-17 00:43:07,876 - src.feature_engineering.screening - ERROR - Error calculating average return for SOLV: 'SOLV'
+2024-11-17 00:43:08,212 - src.feature_engineering.screening - WARNING - P/E ratio not available for TTWO.
+2024-11-17 00:43:08,297 - src.feature_engineering.screening - ERROR - Error calculating average return for VLTO: 'VLTO'
+2024-11-17 00:43:08,768 - src.feature_engineering.screening - WARNING - P/E ratio not available for WBD.
+2024-11-17 00:43:08,818 - src.feature_engineering.screening - INFO - Screening complete. 10 tickers passed the criteria.
+2024-11-17 00:43:08,830 - src.feature_engineering.risk_indicators - INFO - Calculating daily returns.
+2024-11-17 00:43:08,840 - src.feature_engineering.risk_indicators - INFO - Daily returns calculated.
+2024-11-17 00:43:08,841 - src.robo_advisor - INFO - Step 4: Portfolio Optimization
+2024-11-17 00:43:08,841 - src.models.optimization - INFO - Starting long-short portfolio optimization.
+2024-11-17 00:43:08,847 - src.models.optimization - INFO - Objective: Maximize Sharpe ratio for long-short portfolio.
+2024-11-17 00:43:09,462 - src.models.optimization - INFO - Long-short portfolio optimization successful.
+2024-11-17 00:43:09,463 - src.robo_advisor - INFO - Step 5: Display and Save Portfolio Allocation
+2024-11-17 00:43:09,464 - src.evaluation.backtesting - INFO - 
+Optimal Portfolio Allocation:
+2024-11-17 00:43:09,465 - src.evaluation.backtesting - INFO -   Ticker        Weight
+0  GOOGL  3.215127e-07
+1   GOOG  3.088232e-09
+2     EA -3.603902e-07
+3    LYV -8.737587e-08
+4   META  1.000000e+00
+5   NFLX  1.125043e-07
+6   NWSA -3.235414e-06
+7    NWS -9.999965e-01
+8   TMUS  1.066089e-08
+9    DIS -2.502152e-07
+2024-11-17 00:43:10,653 - src.evaluation.backtesting - INFO - Portfolio allocation saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-17 00:43:10,653 - src.robo_advisor - INFO - Step 6: Calculate and Save Risk Metrics
+2024-11-17 00:43:10,654 - src.evaluation.backtesting - INFO - Calculating risk metrics for the portfolio.
+2024-11-17 00:43:10,654 - src.feature_engineering.risk_indicators - INFO - Calculating Value at Risk (VaR) at 95.0% confidence level.
+2024-11-17 00:43:10,660 - src.feature_engineering.risk_indicators - INFO - VaR calculated: -0.0408
+2024-11-17 00:43:10,661 - src.feature_engineering.risk_indicators - INFO - Calculating Max Drawdown.
+2024-11-17 00:43:10,662 - src.feature_engineering.risk_indicators - INFO - Max Drawdown calculated: -0.7925
+2024-11-17 00:43:10,662 - src.feature_engineering.risk_indicators - INFO - Calculating Sharpe Ratio.
+2024-11-17 00:43:10,664 - src.feature_engineering.risk_indicators - INFO - Sharpe Ratio calculated: -0.0328
+2024-11-17 00:43:10,664 - src.evaluation.backtesting - INFO - Value at Risk (VaR): -0.0408
+2024-11-17 00:43:10,664 - src.evaluation.backtesting - INFO - Max Drawdown: -0.7925
+2024-11-17 00:43:10,665 - src.evaluation.backtesting - INFO - Sharpe Ratio: -0.0328
+2024-11-17 00:43:10,767 - src.evaluation.backtesting - INFO - Risk metrics saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-17 00:43:10,767 - src.robo_advisor - INFO - Robo Advisor run completed successfully.
+2024-11-19 11:06:35,318 - src.robo_advisor - INFO - Step 1: Data Ingestion
+2024-11-19 11:06:35,320 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-19 11:06:37,897 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-19 11:06:37,900 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2020-01-01_2023-12-31.csv
+2024-11-19 11:06:40,323 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 11:06:40,653 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 11:06:40,655 - src.robo_advisor - INFO - Collecting additional financial data for tickers.
+2024-11-19 11:06:40,655 - src.data_ingestion.fetch_data - INFO - Starting collection of financial data for tickers.
+2024-11-19 11:08:47,917 - src.robo_advisor - INFO - Step 1: Data Ingestion
+2024-11-19 11:08:47,918 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-19 11:08:50,335 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-19 11:08:50,337 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2020-01-01_2023-12-31.csv
+2024-11-19 11:08:52,473 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 11:08:52,779 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 11:08:52,780 - src.robo_advisor - INFO - Collecting additional financial data for tickers.
+2024-11-19 11:08:52,780 - src.data_ingestion.fetch_data - INFO - Starting collection of financial data for tickers.
+2024-11-19 11:10:56,404 - src.data_ingestion.fetch_data - INFO - Completed collection of financial data.
+2024-11-19 11:10:58,247 - src.data_ingestion.fetch_data - INFO - Financial data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\financial_data.xlsx
+2024-11-19 11:10:58,247 - src.robo_advisor - INFO - Step 2: Data Preprocessing
+2024-11-19 11:10:58,248 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-19 11:10:58,254 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.5: 492
+2024-11-19 11:10:58,313 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (1006, 493)
+2024-11-19 11:11:00,327 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-19 11:11:00,327 - src.robo_advisor - INFO - Step 3: Feature Engineering - Screening
+2024-11-19 11:11:00,328 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-19 11:11:03,226 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-19 11:11:03,235 - src.feature_engineering.screening - INFO - Applying sector-specific screening criteria based on configuration.
+2024-11-19 11:11:03,728 - src.feature_engineering.screening - ERROR - Error calculating average return for AMTM: 'AMTM'
+2024-11-19 11:11:04,357 - src.feature_engineering.screening - ERROR - Error calculating average return for BRK.B: 'BRK.B'
+2024-11-19 11:11:04,384 - src.feature_engineering.screening - ERROR - Error calculating average return for BF.B: 'BF.B'
+2024-11-19 11:11:05,045 - src.feature_engineering.screening - ERROR - Error calculating momentum for CEG: 'CEG'
+2024-11-19 11:11:06,141 - src.feature_engineering.screening - ERROR - Error calculating average return for GEHC: 'GEHC'
+2024-11-19 11:11:06,142 - src.feature_engineering.screening - ERROR - Error calculating average return for GEV: 'GEV'
+2024-11-19 11:11:06,500 - src.feature_engineering.screening - ERROR - Error calculating average return for KVUE: 'KVUE'
+2024-11-19 11:11:07,936 - src.feature_engineering.screening - ERROR - Error calculating average return for ON: 'ON'
+2024-11-19 11:11:08,146 - src.feature_engineering.screening - WARNING - P/E ratio not available for PARA.
+2024-11-19 11:11:08,241 - src.feature_engineering.screening - ERROR - Error calculating average return for SW: 'SW'
+2024-11-19 11:11:08,243 - src.feature_engineering.screening - ERROR - Error calculating average return for SOLV: 'SOLV'
+2024-11-19 11:11:08,670 - src.feature_engineering.screening - WARNING - P/E ratio not available for TTWO.
+2024-11-19 11:11:08,735 - src.feature_engineering.screening - ERROR - Error calculating average return for VLTO: 'VLTO'
+2024-11-19 11:11:09,149 - src.feature_engineering.screening - WARNING - P/E ratio not available for WBD.
+2024-11-19 11:11:09,186 - src.feature_engineering.screening - INFO - Screening complete. 10 tickers passed the criteria.
+2024-11-19 11:11:09,197 - src.feature_engineering.risk_indicators - INFO - Calculating daily returns.
+2024-11-19 11:11:09,204 - src.feature_engineering.risk_indicators - INFO - Daily returns calculated.
+2024-11-19 11:11:09,204 - src.robo_advisor - INFO - Step 4: Portfolio Optimization
+2024-11-19 11:11:09,204 - src.models.optimization - INFO - Starting long-short portfolio optimization.
+2024-11-19 11:11:09,209 - src.models.optimization - INFO - Objective: Maximize Sharpe ratio for long-short portfolio.
+2024-11-19 11:11:09,735 - src.models.optimization - INFO - Long-short portfolio optimization successful.
+2024-11-19 11:11:09,736 - src.robo_advisor - INFO - Step 5: Display and Save Portfolio Allocation
+2024-11-19 11:11:09,737 - src.evaluation.backtesting - INFO - 
+Optimal Portfolio Allocation:
+2024-11-19 11:11:09,737 - src.evaluation.backtesting - INFO -   Ticker        Weight
+0  GOOGL  3.215127e-07
+1   GOOG  3.088232e-09
+2     EA -3.603902e-07
+3    LYV -8.737587e-08
+4   META  1.000000e+00
+5   NFLX  1.125043e-07
+6   NWSA -3.235414e-06
+7    NWS -9.999965e-01
+8   TMUS  1.066089e-08
+9    DIS -2.502152e-07
+2024-11-19 11:11:09,808 - src.evaluation.backtesting - INFO - Portfolio allocation saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-19 11:11:09,810 - src.robo_advisor - INFO - Step 6: Calculate and Save Risk Metrics
+2024-11-19 11:11:09,810 - src.evaluation.backtesting - INFO - Calculating risk metrics for the portfolio.
+2024-11-19 11:11:09,810 - src.feature_engineering.risk_indicators - INFO - Calculating Value at Risk (VaR) at 95.0% confidence level.
+2024-11-19 11:11:09,813 - src.feature_engineering.risk_indicators - INFO - VaR calculated: -0.0408
+2024-11-19 11:11:09,814 - src.feature_engineering.risk_indicators - INFO - Calculating Max Drawdown.
+2024-11-19 11:11:09,815 - src.feature_engineering.risk_indicators - INFO - Max Drawdown calculated: -0.7925
+2024-11-19 11:11:09,816 - src.feature_engineering.risk_indicators - INFO - Calculating Sharpe Ratio.
+2024-11-19 11:11:09,816 - src.feature_engineering.risk_indicators - INFO - Sharpe Ratio calculated: -0.0328
+2024-11-19 11:11:09,817 - src.evaluation.backtesting - INFO - Value at Risk (VaR): -0.0408
+2024-11-19 11:11:09,817 - src.evaluation.backtesting - INFO - Max Drawdown: -0.7925
+2024-11-19 11:11:09,817 - src.evaluation.backtesting - INFO - Sharpe Ratio: -0.0328
+2024-11-19 11:11:09,897 - src.evaluation.backtesting - INFO - Risk metrics saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-19 11:11:09,897 - src.robo_advisor - INFO - Robo Advisor run completed successfully.
+2024-11-19 19:50:49,598 - src.robo_advisor - INFO - Step 1: Data Ingestion
+2024-11-19 19:50:49,599 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-19 19:50:51,602 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-19 19:50:51,606 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2020-01-01_2023-12-31.csv
+2024-11-19 19:50:53,638 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 19:50:53,921 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 19:50:53,922 - src.robo_advisor - INFO - Collecting additional financial data for tickers.
+2024-11-19 19:50:53,923 - src.data_ingestion.fetch_data - INFO - Starting collection of financial data for tickers.
+2024-11-19 19:52:15,874 - src.data_ingestion.fetch_data - INFO - Completed collection of financial data.
+2024-11-19 19:52:17,454 - src.data_ingestion.fetch_data - INFO - Financial data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\financial_data.xlsx
+2024-11-19 19:52:17,455 - src.robo_advisor - INFO - Step 2: Data Preprocessing
+2024-11-19 19:52:17,455 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-19 19:52:17,460 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.5: 492
+2024-11-19 19:52:17,504 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (1006, 493)
+2024-11-19 19:52:19,238 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-19 19:52:19,238 - src.robo_advisor - INFO - Step 3: Feature Engineering - Scoring and Ranking
+2024-11-19 19:52:19,238 - src.feature_engineering.scoring - INFO - Calculating composite scores for stocks.
+2024-11-19 19:52:19,256 - src.feature_engineering.scoring - INFO - Composite scores calculated.
+2024-11-19 19:52:19,257 - src.feature_engineering.screening - INFO - Ranking stocks within each sector based on composite scores.
+2024-11-19 19:52:19,288 - src.feature_engineering.screening - INFO - Selected 55 stocks for long positions.
+2024-11-19 19:52:19,288 - src.feature_engineering.screening - INFO - Selected 55 stocks for short positions.
+2024-11-19 20:23:08,485 - src.robo_advisor - INFO - Step 1: Data Ingestion
+2024-11-19 20:23:08,486 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-19 20:23:10,940 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-19 20:23:10,942 - src.data_ingestion.fetch_data - INFO - Fetching historical data from Yahoo Finance for tickers: ['MMM', 'AOS', 'ABT', 'ABBV', 'ACN', 'ADBE', 'AMD', 'AES', 'AFL', 'A', 'APD', 'ABNB', 'AKAM', 'ALB', 'ARE', 'ALGN', 'ALLE', 'LNT', 'ALL', 'GOOGL', 'GOOG', 'MO', 'AMZN', 'AMCR', 'AMTM', 'AEE', 'AEP', 'AXP', 'AIG', 'AMT', 'AWK', 'AMP', 'AME', 'AMGN', 'APH', 'ADI', 'ANSS', 'AON', 'APA', 'AAPL', 'AMAT', 'APTV', 'ACGL', 'ADM', 'ANET', 'AJG', 'AIZ', 'T', 'ATO', 'ADSK', 'ADP', 'AZO', 'AVB', 'AVY', 'AXON', 'BKR', 'BALL', 'BAC', 'BAX', 'BDX', 'BRK.B', 'BBY', 'TECH', 'BIIB', 'BLK', 'BX', 'BK', 'BA', 'BKNG', 'BWA', 'BSX', 'BMY', 'AVGO', 'BR', 'BRO', 'BF.B', 'BLDR', 'BG', 'BXP', 'CHRW', 'CDNS', 'CZR', 'CPT', 'CPB', 'COF', 'CAH', 'KMX', 'CCL', 'CARR', 'CTLT', 'CAT', 'CBOE', 'CBRE', 'CDW', 'CE', 'COR', 'CNC', 'CNP', 'CF', 'CRL', 'SCHW', 'CHTR', 'CVX', 'CMG', 'CB', 'CHD', 'CI', 'CINF', 'CTAS', 'CSCO', 'C', 'CFG', 'CLX', 'CME', 'CMS', 'KO', 'CTSH', 'CL', 'CMCSA', 'CAG', 'COP', 'ED', 'STZ', 'CEG', 'COO', 'CPRT', 'GLW', 'CPAY', 'CTVA', 'CSGP', 'COST', 'CTRA', 'CRWD', 'CCI', 'CSX', 'CMI', 'CVS', 'DHR', 'DRI', 'DVA', 'DAY', 'DECK', 'DE', 'DELL', 'DAL', 'DVN', 'DXCM', 'FANG', 'DLR', 'DFS', 'DG', 'DLTR', 'D', 'DPZ', 'DOV', 'DOW', 'DHI', 'DTE', 'DUK', 'DD', 'EMN', 'ETN', 'EBAY', 'ECL', 'EIX', 'EW', 'EA', 'ELV', 'EMR', 'ENPH', 'ETR', 'EOG', 'EPAM', 'EQT', 'EFX', 'EQIX', 'EQR', 'ERIE', 'ESS', 'EL', 'EG', 'EVRG', 'ES', 'EXC', 'EXPE', 'EXPD', 'EXR', 'XOM', 'FFIV', 'FDS', 'FICO', 'FAST', 'FRT', 'FDX', 'FIS', 'FITB', 'FSLR', 'FE', 'FI', 'FMC', 'F', 'FTNT', 'FTV', 'FOXA', 'FOX', 'BEN', 'FCX', 'GRMN', 'IT', 'GE', 'GEHC', 'GEV', 'GEN', 'GNRC', 'GD', 'GIS', 'GM', 'GPC', 'GILD', 'GPN', 'GL', 'GDDY', 'GS', 'HAL', 'HIG', 'HAS', 'HCA', 'DOC', 'HSIC', 'HSY', 'HES', 'HPE', 'HLT', 'HOLX', 'HD', 'HON', 'HRL', 'HST', 'HWM', 'HPQ', 'HUBB', 'HUM', 'HBAN', 'HII', 'IBM', 'IEX', 'IDXX', 'ITW', 'INCY', 'IR', 'PODD', 'INTC', 'ICE', 'IFF', 'IP', 'IPG', 'INTU', 'ISRG', 'IVZ', 'INVH', 'IQV', 'IRM', 'JBHT', 'JBL', 'JKHY', 'J', 'JNJ', 'JCI', 'JPM', 'JNPR', 'K', 'KVUE', 'KDP', 'KEY', 'KEYS', 'KMB', 'KIM', 'KMI', 'KKR', 'KLAC', 'KHC', 'KR', 'LHX', 'LH', 'LRCX', 'LW', 'LVS', 'LDOS', 'LEN', 'LLY', 'LIN', 'LYV', 'LKQ', 'LMT', 'L', 'LOW', 'LULU', 'LYB', 'MTB', 'MRO', 'MPC', 'MKTX', 'MAR', 'MMC', 'MLM', 'MAS', 'MA', 'MTCH', 'MKC', 'MCD', 'MCK', 'MDT', 'MRK', 'META', 'MET', 'MTD', 'MGM', 'MCHP', 'MU', 'MSFT', 'MAA', 'MRNA', 'MHK', 'MOH', 'TAP', 'MDLZ', 'MPWR', 'MNST', 'MCO', 'MS', 'MOS', 'MSI', 'MSCI', 'NDAQ', 'NTAP', 'NFLX', 'NEM', 'NWSA', 'NWS', 'NEE', 'NKE', 'NI', 'NDSN', 'NSC', 'NTRS', 'NOC', 'NCLH', 'NRG', 'NUE', 'NVDA', 'NVR', 'NXPI', 'ORLY', 'OXY', 'ODFL', 'OMC', 'ON', 'OKE', 'ORCL', 'OTIS', 'PCAR', 'PKG', 'PLTR', 'PANW', 'PARA', 'PH', 'PAYX', 'PAYC', 'PYPL', 'PNR', 'PEP', 'PFE', 'PCG', 'PM', 'PSX', 'PNW', 'PNC', 'POOL', 'PPG', 'PPL', 'PFG', 'PG', 'PGR', 'PLD', 'PRU', 'PEG', 'PTC', 'PSA', 'PHM', 'QRVO', 'PWR', 'QCOM', 'DGX', 'RL', 'RJF', 'RTX', 'O', 'REG', 'REGN', 'RF', 'RSG', 'RMD', 'RVTY', 'ROK', 'ROL', 'ROP', 'ROST', 'RCL', 'SPGI', 'CRM', 'SBAC', 'SLB', 'STX', 'SRE', 'NOW', 'SHW', 'SPG', 'SWKS', 'SJM', 'SW', 'SNA', 'SOLV', 'SO', 'LUV', 'SWK', 'SBUX', 'STT', 'STLD', 'STE', 'SYK', 'SMCI', 'SYF', 'SNPS', 'SYY', 'TMUS', 'TROW', 'TTWO', 'TPR', 'TRGP', 'TGT', 'TEL', 'TDY', 'TFX', 'TER', 'TSLA', 'TXN', 'TXT', 'TMO', 'TJX', 'TSCO', 'TT', 'TDG', 'TRV', 'TRMB', 'TFC', 'TYL', 'TSN', 'USB', 'UBER', 'UDR', 'ULTA', 'UNP', 'UAL', 'UPS', 'URI', 'UNH', 'UHS', 'VLO', 'VTR', 'VLTO', 'VRSN', 'VRSK', 'VZ', 'VRTX', 'VTRS', 'VICI', 'V', 'VST', 'VMC', 'WRB', 'GWW', 'WAB', 'WBA', 'WMT', 'DIS', 'WBD', 'WM', 'WAT', 'WEC', 'WFC', 'WELL', 'WST', 'WDC', 'WY', 'WMB', 'WTW', 'WYNN', 'XEL', 'XYL', 'YUM', 'ZBRA', 'ZBH', 'ZTS']
+2024-11-19 20:23:52,102 - src.data_ingestion.fetch_data - INFO - Historical data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2023-01-01_2024-11-18.csv
+2024-11-19 20:23:53,367 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 20:23:53,976 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 20:23:53,983 - src.robo_advisor - INFO - Collecting additional financial data for tickers.
+2024-11-19 20:23:53,984 - src.data_ingestion.fetch_data - INFO - Starting collection of financial data for tickers.
+2024-11-19 20:25:17,794 - src.data_ingestion.fetch_data - INFO - Completed collection of financial data.
+2024-11-19 20:25:20,714 - src.data_ingestion.fetch_data - INFO - Financial data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\financial_data.xlsx
+2024-11-19 20:25:20,714 - src.robo_advisor - INFO - Step 2: Data Preprocessing
+2024-11-19 20:25:20,714 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-19 20:25:20,721 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.3: 499
+2024-11-19 20:25:20,745 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (472, 500)
+2024-11-19 20:25:22,197 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-19 20:25:22,197 - src.robo_advisor - INFO - Step 3: Feature Engineering - Scoring and Ranking
+2024-11-19 20:25:22,198 - src.feature_engineering.scoring - INFO - Calculating composite scores for stocks.
+2024-11-19 20:25:22,226 - src.feature_engineering.scoring - INFO - Composite scores calculated.
+2024-11-19 20:25:22,227 - src.feature_engineering.screening - INFO - Ranking stocks within each sector based on composite scores.
+2024-11-19 20:25:22,279 - src.feature_engineering.screening - INFO - Selected 55 stocks for long positions.
+2024-11-19 20:25:22,279 - src.feature_engineering.screening - INFO - Selected 55 stocks for short positions.
+2024-11-19 20:25:22,288 - src.feature_engineering.risk_indicators - INFO - Calculating daily returns.
+2024-11-19 20:25:22,328 - src.feature_engineering.risk_indicators - INFO - Daily returns calculated.
+2024-11-19 20:25:22,328 - src.robo_advisor - INFO - Step 4: Portfolio Optimization
+2024-11-19 20:25:22,328 - src.models.optimization - INFO - Starting long-short portfolio optimization.
+2024-11-19 20:25:22,336 - src.models.optimization - INFO - Objective: Maximize Sharpe ratio for long-short portfolio.
+2024-11-19 20:25:28,839 - src.models.optimization - ERROR - Long-short portfolio optimization failed: Iteration limit reached
+2024-11-19 20:33:52,229 - src.robo_advisor - INFO - Step 1: Data Ingestion
+2024-11-19 20:33:52,229 - src.data_ingestion.fetch_data - INFO - Fetching S&P 500 tickers and sectors from https://en.wikipedia.org/wiki/List_of_S%26P_500_companies
+2024-11-19 20:33:54,698 - src.data_ingestion.fetch_data - INFO - Retrieved 503 S&P 500 tickers with sectors.
+2024-11-19 20:33:54,701 - src.data_ingestion.fetch_data - INFO - Loading historical data from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\historical_data_2023-01-01_2024-11-18.csv
+2024-11-19 20:33:55,864 - src.data_ingestion.fetch_data - INFO - Raw data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 20:33:56,071 - src.data_ingestion.fetch_data - INFO - Raw data loaded from C:\Users\karal\PycharmProjects\Athena-Prototype\data\raw\stock_prices_raw.csv
+2024-11-19 20:33:56,072 - src.robo_advisor - INFO - Collecting additional financial data for tickers.
+2024-11-19 20:33:56,073 - src.data_ingestion.fetch_data - INFO - Starting collection of financial data for tickers.
+2024-11-19 20:35:37,482 - src.data_ingestion.fetch_data - INFO - Completed collection of financial data.
+2024-11-19 20:35:39,574 - src.data_ingestion.fetch_data - INFO - Financial data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\financial_data.xlsx
+2024-11-19 20:35:39,574 - src.robo_advisor - INFO - Step 2: Data Preprocessing
+2024-11-19 20:35:39,574 - src.data_ingestion.preprocess - INFO - Cleaning stock data.
+2024-11-19 20:35:39,577 - src.data_ingestion.preprocess - INFO - Stocks retained after applying coverage threshold of 0.3: 499
+2024-11-19 20:35:39,596 - src.data_ingestion.preprocess - INFO - Stock data cleaned. Final shape: (472, 500)
+2024-11-19 20:35:40,489 - src.data_ingestion.preprocess - INFO - Processed data saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data\processed\stock_prices_cleaned.csv
+2024-11-19 20:35:40,490 - src.robo_advisor - INFO - Step 3: Feature Engineering - Scoring and Ranking
+2024-11-19 20:35:40,490 - src.feature_engineering.scoring - INFO - Calculating composite scores for stocks.
+2024-11-19 20:35:40,507 - src.feature_engineering.scoring - INFO - Composite scores calculated.
+2024-11-19 20:35:40,507 - src.feature_engineering.screening - INFO - Ranking stocks within each sector based on composite scores.
+2024-11-19 20:35:40,535 - src.feature_engineering.screening - INFO - Selected 55 stocks for long positions.
+2024-11-19 20:35:40,535 - src.feature_engineering.screening - INFO - Selected 55 stocks for short positions.
+2024-11-19 20:35:40,542 - src.feature_engineering.risk_indicators - INFO - Calculating daily returns.
+2024-11-19 20:35:40,590 - src.feature_engineering.risk_indicators - INFO - Daily returns calculated.
+2024-11-19 20:35:40,590 - src.robo_advisor - INFO - Step 4: Portfolio Optimization
+2024-11-19 20:35:40,591 - src.models.optimization - INFO - Starting long-short portfolio optimization.
+2024-11-19 20:35:40,596 - src.models.optimization - INFO - Objective: Maximize Sharpe ratio for long-short portfolio.
+2024-11-19 20:35:40,829 - src.models.optimization - INFO - Long-short portfolio optimization successful.
+2024-11-19 20:35:40,832 - src.robo_advisor - INFO - Step 5: Display and Save Portfolio Allocation
+2024-11-19 20:35:40,833 - src.evaluation.backtesting - INFO - 
+Optimal Portfolio Allocation:
+2024-11-19 20:35:40,833 - src.evaluation.backtesting - INFO -      Ticker    Weight
+GE       GE  0.007881
+UPS     UPS  0.018158
+ITW     ITW  0.008059
+NSC     NSC  0.007208
+PAYX   PAYX  0.008475
+...     ...       ...
+DHI     DHI -0.027297
+POOL   POOL -0.025371
+GM       GM -0.008992
+LVS     LVS -0.008303
+RCL     RCL -0.028972
+
+[110 rows x 2 columns]
+2024-11-19 20:35:40,923 - src.evaluation.backtesting - INFO - Portfolio allocation saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-19 20:35:40,923 - src.robo_advisor - INFO - Step 6: Calculate and Save Risk Metrics
+2024-11-19 20:35:40,923 - src.evaluation.backtesting - INFO - Calculating risk metrics for the portfolio.
+2024-11-19 20:35:40,925 - src.feature_engineering.risk_indicators - INFO - Calculating Value at Risk (VaR) at 95.0% confidence level.
+2024-11-19 20:35:40,929 - src.feature_engineering.risk_indicators - INFO - VaR calculated: -0.0108
+2024-11-19 20:35:40,930 - src.feature_engineering.risk_indicators - INFO - Calculating Max Drawdown.
+2024-11-19 20:35:40,932 - src.feature_engineering.risk_indicators - INFO - Max Drawdown calculated: -0.3529
+2024-11-19 20:35:40,932 - src.feature_engineering.risk_indicators - INFO - Calculating Sharpe Ratio.
+2024-11-19 20:35:40,934 - src.feature_engineering.risk_indicators - INFO - Sharpe Ratio calculated: -2.3732
+2024-11-19 20:35:40,934 - src.evaluation.backtesting - INFO - Value at Risk (VaR): -0.0108
+2024-11-19 20:35:40,934 - src.evaluation.backtesting - INFO - Max Drawdown: -0.3529
+2024-11-19 20:35:40,934 - src.evaluation.backtesting - INFO - Sharpe Ratio: -2.3732
+2024-11-19 20:35:41,025 - src.evaluation.backtesting - INFO - Risk metrics saved to C:\Users\karal\PycharmProjects\Athena-Prototype\data/processed/optimized_portfolio.xlsx
+2024-11-19 20:35:41,026 - src.robo_advisor - INFO - Robo Advisor run completed successfully.

@@ -5,12 +5,13 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import yfinance as yf
+import time
+from io import StringIO
 from src.utils.logger import get_logger
 from src.utils.config import PROJECT_ROOT
 from src.utils.config_loader import load_config  # Load the configuration file
 
 logger = get_logger(__name__)
-
 
 def get_sp500_tickers_with_sector():
     """
@@ -28,7 +29,6 @@ def get_sp500_tickers_with_sector():
     table = soup.find('table', {'id': 'constituents'})
 
     if table:
-        from io import StringIO  # Import StringIO inside the function or at the top
         df = pd.read_html(StringIO(str(table)))[0]
         df = df[['Symbol', 'GICS Sector']]
         df.rename(columns={'Symbol': 'Ticker', 'GICS Sector': 'Sector'}, inplace=True)
@@ -38,7 +38,6 @@ def get_sp500_tickers_with_sector():
 
     logger.info(f"Retrieved {len(df)} S&P 500 tickers with sectors.")
     return df
-
 
 def fetch_historical_data(tickers_df=None, start_date=None, end_date=None):
     """
@@ -87,7 +86,6 @@ def fetch_historical_data(tickers_df=None, start_date=None, end_date=None):
 
     return data, tickers_df
 
-
 def save_raw_data(data, filename='stock_prices_raw.csv'):
     """
     Saves raw data to the data/raw directory.
@@ -117,3 +115,101 @@ def load_raw_data(filename='stock_prices_raw.csv'):
     data = pd.read_csv(raw_data_path, index_col='Date', parse_dates=True)
     logger.info(f"Raw data loaded from {raw_data_path}")
     return data
+
+def collect_stocks_data(tickers):
+    """
+    Collects comprehensive financial data for a list of tickers.
+
+    Parameters:
+    - tickers (list): List of ticker symbols.
+
+    Returns:
+    - stocks_df (DataFrame): DataFrame containing financial data for the tickers.
+    """
+    logger.info("Starting collection of financial data for tickers.")
+    stocks_data = []
+
+    for ticker in tickers:
+        try:
+            logger.debug(f"Fetching data for {ticker}")
+            stock = yf.Ticker(ticker)
+            data = stock.info
+
+            # Extract desired financial metrics
+            stock_data = {
+                'Ticker': ticker,
+                'Sector': data.get('sector', None),
+                'Industry': data.get('industry', None),
+                'Market Cap': data.get('marketCap', None),
+                'Enterprise Value': data.get('enterpriseValue', None),
+                'Trailing P/E': data.get('trailingPE', None),
+                'Forward P/E': data.get('forwardPE', None),
+                'PEG Ratio': data.get('pegRatio', None),
+                'Price to Sales Ratio': data.get('priceToSalesTrailing12Months', None),
+                'Price to Book Ratio': data.get('priceToBook', None),
+                'Enterprise Value/Revenue': data.get('enterpriseToRevenue', None),
+                'Enterprise Value/EBITDA': data.get('enterpriseToEbitda', None),
+                'Profit Margin': data.get('profitMargins', None),
+                'Operating Margin': data.get('operatingMargins', None),
+                'Return on Assets': data.get('returnOnAssets', None),
+                'Return on Equity': data.get('returnOnEquity', None),
+                'Revenue': data.get('totalRevenue', None),
+                'Revenue Per Share': data.get('revenuePerShare', None),
+                'Quarterly Revenue Growth': data.get('revenueGrowth', None),
+                'Gross Profit': data.get('grossProfits', None),
+                'EBITDA': data.get('ebitda', None),
+                'Net Income': data.get('netIncomeToCommon', None),
+                'Diluted EPS': data.get('trailingEps', None),
+                'Quarterly Earnings Growth': data.get('earningsGrowth', None),
+                'Total Cash': data.get('totalCash', None),
+                'Total Cash Per Share': data.get('totalCashPerShare', None),
+                'Total Debt': data.get('totalDebt', None),
+                'Debt to Equity': data.get('debtToEquity', None),
+                'Current Ratio': data.get('currentRatio', None),
+                'Book Value Per Share': data.get('bookValue', None),
+                'Operating Cash Flow': data.get('operatingCashflow', None),
+                'Levered Free Cash Flow': data.get('freeCashflow', None),
+                'Beta': data.get('beta', None),
+                '52 Week High': data.get('fiftyTwoWeekHigh', None),
+                '52 Week Low': data.get('fiftyTwoWeekLow', None),
+                '50 Day Moving Average': data.get('fiftyDayAverage', None),
+                '200 Day Moving Average': data.get('twoHundredDayAverage', None),
+                'Shares Outstanding': data.get('sharesOutstanding', None),
+                'Dividend Yield': data.get('dividendYield', None),
+                'Payout Ratio': data.get('payoutRatio', None),
+                'Ex-Dividend Date': data.get('exDividendDate', None),
+                'Short Ratio': data.get('shortRatio', None),
+                'Float Shares': data.get('floatShares', None),
+                'Avg 10 Day Volume': data.get('averageVolume10days', None),
+                'Avg 3 Month Volume': data.get('averageVolume', None),
+            }
+
+            # Convert Unix timestamp to datetime for 'Ex-Dividend Date'
+            ex_dividend_date = stock_data['Ex-Dividend Date']
+            if ex_dividend_date:
+                stock_data['Ex-Dividend Date'] = pd.to_datetime(ex_dividend_date, unit='s').date()
+
+            stocks_data.append(stock_data)
+
+            # Sleep to avoid hitting rate limits
+        except Exception as e:
+            logger.error(f"Error fetching data for {ticker}: {e}")
+
+    stocks_df = pd.DataFrame(stocks_data)
+    logger.info("Completed collection of financial data.")
+    return stocks_df
+
+def save_financial_data_to_excel(stocks_df, filename='financial_data.xlsx'):
+    """
+    Saves the financial data DataFrame to an Excel file.
+
+    Parameters:
+    - stocks_df (DataFrame): DataFrame containing financial data.
+    - filename (str): Name of the Excel file.
+    """
+    output_dir = os.path.join(PROJECT_ROOT, 'data', 'processed')
+    os.makedirs(output_dir, exist_ok=True)
+    file_path = os.path.join(output_dir, filename)
+
+    stocks_df.to_excel(file_path, index=False)
+    logger.info(f"Financial data saved to {file_path}")
